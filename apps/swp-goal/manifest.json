@@ -1,0 +1,12 @@
+{
+  "id": "./",
+  "name": "MF Future Goal Planner",
+  "short_name": "MF Goal",
+  "description": "Plan mutual fund corpus, SIP contributions, and SWP withdrawals for future purchases.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#07111f",
+  "theme_color": "#07111f"
+}
