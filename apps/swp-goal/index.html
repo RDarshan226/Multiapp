@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07111f"><meta name="description" content="Estimate mutual fund investments for future purchases and planned SWPs.">
+<link rel="manifest" href="./manifest.json"><title>MF Future Goal Planner</title>
+<style>
+:root{color-scheme:dark;--bg:#07111f;--panel:#101d30;--line:#29425f;--cyan:#55e6ff;--purple:#b79aff;--muted:#a9bad0;--green:#75f0bb;--warn:#ffd58b}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#142945 0,var(--bg) 58%);color:#f5f8ff;font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}button,input,select{font:inherit}.wrap{max-width:960px;margin:auto;padding:18px 14px 46px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}.back{color:var(--cyan);text-decoration:none}.pill{border:1px solid #35516d;border-radius:999px;padding:5px 10px;color:var(--muted);font-size:.78rem}.hero{margin:18px 0 22px}.eyebrow{color:var(--cyan);text-transform:uppercase;letter-spacing:.14em;font-size:.76rem;font-weight:800}h1{font-size:clamp(1.9rem,6vw,3rem);line-height:1.1;margin:8px 0}h2{font-size:1.05rem;margin:0 0 16px}.sub{color:var(--muted);max-width:680px}.layout{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:16px}.panel{background:linear-gradient(150deg,#12233a,#0d192a);border:1px solid var(--line);border-radius:20px;padding:20px;min-width:0}.fields{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}label{font-size:.84rem;color:#d6e3f3}input,select{width:100%;background:#081525;border:1px solid #34506c;color:#fff;border-radius:11px;padding:11px 12px;min-height:44px}input:focus,select:focus{outline:2px solid var(--cyan);outline-offset:1px}.hint{font-size:.76rem;color:var(--muted)}.results{display:grid;gap:10px}.metric{padding:14px;border:1px solid #2a4864;border-radius:14px;background:#0a1727}.metric .label{font-size:.8rem;color:var(--muted)}.metric .value{font-size:clamp(1.35rem,4vw,1.9rem);font-weight:800;letter-spacing:-.025em;overflow-wrap:anywhere}.metric.primary{border-color:#397d90;background:linear-gradient(120deg,#103044,#111f35)}.metric.primary .value{color:var(--cyan)}.metric .note{font-size:.78rem;color:var(--muted)}.mini{display:grid;grid-template-columns:1fr 1fr;gap:10px}.section{margin-top:16px}.bar{height:12px;border-radius:999px;background:#1b2e45;overflow:hidden;display:flex;margin:10px 0}.bar span:first-child{background:var(--cyan)}.bar span:last-child{background:var(--purple)}.legend{display:flex;flex-wrap:wrap;gap:12px;color:var(--muted);font-size:.78rem}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;background:var(--cyan)}.dot.purple{background:var(--purple)}.notice{border-left:3px solid var(--warn);padding:10px 12px;background:#241f1a;border-radius:0 10px 10px 0;color:#e9d9bf;font-size:.8rem;margin-top:15px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}button{background:var(--cyan);color:#04121c;font-weight:800;border:0;border-radius:11px;padding:11px 14px;cursor:pointer}button.secondary{background:#1b2d43;color:#e5f1ff;border:1px solid #34506c}.foot{margin-top:24px;color:var(--muted);font-size:.8rem}.error{color:#ffb3b3;font-size:.82rem;min-height:1.2em}@media(max-width:720px){.layout{grid-template-columns:1fr}.fields{gap:12px}.panel{padding:16px}}@media(max-width:380px){.fields,.mini{grid-template-columns:1fr}.field.full{grid-column:auto}}
+</style></head>
+<body><main class="wrap">
+<div class="top"><a class="back" href="../../">← Multiapp Hub</a><span class="pill">MF goal planner · v1.0</span></div>
+<header class="hero"><div class="eyebrow">Plan a future purchase</div><h1>Make your goal fund work.</h1><p class="sub">Estimate how much a bike or other item may cost later, the monthly SIP that could build the target corpus, and how a planned SWP might fund withdrawals. Change the assumptions to compare scenarios.</p></header>
+<div class="layout">
+<section class="panel"><h2>1 · Your future purchase</h2><div class="fields">
+<div class="field full"><label for="goal">Goal / item name</label><input id="goal" value="Bike" maxlength="60"></div>
+<div class="field"><label for="cost">Today's price (₹)</label><input id="cost" type="number" min="1" step="1000" value="150000"></div>
+<div class="field"><label for="years">Years until purchase</label><input id="years" type="number" min="0" max="50" step="1" value="3"></div>
+<div class="field"><label for="inflation">Price inflation (% p.a.)</label><input id="inflation" type="number" min="0" max="30" step="0.5" value="6"></div>
+<div class="field"><label for="return">MF assumed return (% p.a.)</label><input id="return" type="number" min="0" max="30" step="0.5" value="10"></div>
+<div class="field"><label for="current">Existing goal investment (₹)</label><input id="current" type="number" min="0" step="1000" value="0"></div>
+<div class="field"><label for="sip">Monthly SIP you can invest (₹)</label><input id="sip" type="number" min="0" step="500" value="3000"></div>
+</div><p class="hint">Assumes monthly SIPs at month-end, a constant illustrative return, and annual price inflation.</p>
+<div class="actions"><button id="reset" class="secondary" type="button">Reset example</button><button id="share" type="button">Copy summary</button></div><p id="copyStatus" class="hint" aria-live="polite"></p></section>
+<section class="panel"><h2>2 · Your goal estimate</h2><div class="results" aria-live="polite">
+<div class="metric primary"><div class="label">Estimated future price</div><div class="value" id="futureCost">₹0</div><div class="note" id="futureNote">Purchase target</div></div>
+<div class="metric"><div class="label">Corpus at goal date</div><div class="value" id="corpus">₹0</div><div class="note">Existing investment growth + projected SIP value</div></div>
+<div class="metric"><div class="label">Monthly SIP needed</div><div class="value" id="neededSip">₹0</div><div class="note" id="sipNote">To reach the inflated target</div></div>
+<div class="mini"><div class="metric"><div class="label">Projected shortfall / surplus</div><div class="value" id="gap">₹0</div><div class="note" id="gapNote">Based on your SIP</div></div><div class="metric"><div class="label">Goal funding status</div><div class="value" id="status">—</div><div class="note">Estimate, not a guarantee</div></div></div>
+<div><div class="label">Projected corpus mix</div><div class="bar"><span id="investedBar" style="width:0%"></span><span id="growthBar" style="width:0%"></span></div><div class="legend"><span><i class="dot"></i>Invested amount</span><span><i class="dot purple"></i>Illustrative growth</span></div></div>
+</div></section>
+</div>
+<section class="panel section"><h2>3 · SWP plan for the purchase</h2><p class="sub">Use this section if you expect to withdraw from the fund over several months instead of paying the full amount at once.</p><div class="fields">
+<div class="field"><label for="swpCorpus">Corpus available for SWP (₹)</label><input id="swpCorpus" type="number" min="0" step="1000" value="200000"></div>
+<div class="field"><label for="swpMonths">Withdrawal period (months)</label><input id="swpMonths" type="number" min="1" max="600" step="1" value="12"></div>
+<div class="field"><label for="swpReturn">Assumed return during SWP (% p.a.)</label><input id="swpReturn" type="number" min="0" max="30" step="0.5" value="6"></div>
+<div class="field"><label for="swpMonthly">Monthly withdrawal you want (₹)</label><input id="swpMonthly" type="number" min="0" step="500" value="15000"></div>
+</div>
+<div class="mini section"><div class="metric primary"><div class="label">Estimated sustainable monthly withdrawal</div><div class="value" id="sustainable">₹0</div><div class="note">Illustrative withdrawals to use corpus over selected months</div></div><div class="metric"><div class="label">Corpus after planned SWP</div><div class="value" id="swpEnd">₹0</div><div class="note" id="swpNote">At the selected withdrawal amount</div></div></div>
+<p id="swpStatus" class="hint" aria-live="polite"></p><div class="notice">Mutual fund returns are market-linked and not guaranteed. Actual returns vary, and taxes, exit loads, expense ratios, timing, and inflation can change the result. This calculator is an educational estimate, not investment advice. A one-time purchase is normally a lump-sum goal; SWP is relevant only if you intentionally spread withdrawals over time.</div>
+</section>
+<footer class="foot">Calculations run locally in your browser. No account or personal financial data is sent to a server. Estimates are rounded to the nearest rupee.</footer>
+</main>
+<script>
+(function(){
+const ids=['goal','cost','years','inflation','return','current','sip','swpCorpus','swpMonths','swpReturn','swpMonthly'];
+const el=id=>document.getElementById(id);
+const num=id=>{const n=Number(el(id).value);return Number.isFinite(n)?Math.max(0,n):0};
+const money=n=>'₹'+Math.round(Number.isFinite(n)?n:0).toLocaleString('en-IN');
+const fmt=n=>Math.round(n).toLocaleString('en-IN');
+function fvExisting(p,r,n){return p*Math.pow(1+r,n)}
+function sipFV(sip,monthlyRate,n){if(n<=0)return 0;if(Math.abs(monthlyRate)<1e-10)return sip*n;return sip*(Math.pow(1+monthlyRate,n)-1)/monthlyRate}
+function calc(){
+const cost=num('cost'), years=Math.min(50,num('years')), inf=num('inflation')/100, annual=Math.min(30,num('return'))/100;
+const existing=num('current'), sip=num('sip'), months=Math.round(years*12), mr=Math.pow(1+annual,1/12)-1;
+const target=cost*Math.pow(1+inf,years), existingFV=fvExisting(existing,annual,years), sipFVVal=sipFV(sip,mr,months), total=existingFV+sipFVVal;
+const remaining=Math.max(0,target-existingFV);
+const need=months===0?remaining:Math.abs(mr)<1e-10?remaining/months:remaining*mr/(Math.pow(1+mr,months)-1);
+const gap=total-target, invested=existing+sip*months, growth=Math.max(0,total-invested), investedShare=total>0?Math.min(100,Math.max(0,invested/total*100)):0;
+el('futureCost').textContent=money(target);el('futureNote').textContent=(el('goal').value.trim()||'Your item')+' in '+years+' year'+(years===1?'':'s');
+el('corpus').textContent=money(total);el('neededSip').textContent=money(need);el('sipNote').textContent=months===0?'At the goal date, monthly SIP cannot build a new corpus': 'Monthly SIP estimate for '+months+' contributions';
+el('gap').textContent=(gap>=0?'+':'−')+money(Math.abs(gap));el('gapNote').textContent=gap>=0?'Projected surplus':'Additional amount needed';el('status').textContent=gap>=0?'On track*':'Shortfall';
+el('investedBar').style.width=investedShare+'%';el('growthBar').style.width=(100-investedShare)+'%';
+const sCorpus=num('swpCorpus'), sMonths=Math.max(1,Math.min(600,Math.round(num('swpMonths')))), sAnnual=Math.min(30,num('swpReturn'))/100, sRate=Math.pow(1+sAnnual,1/12)-1, desired=num('swpMonthly');
+const sustainable=Math.abs(sRate)<1e-10?sCorpus/sMonths:sCorpus*sRate/(1-Math.pow(1+sRate,-sMonths));
+let balance=sCorpus;for(let i=0;i<sMonths;i++)balance=balance*(1+sRate)-desired;
+el('sustainable').textContent=money(sustainable);el('swpEnd').textContent=money(Math.max(0,balance));el('swpNote').textContent=balance<0?'Requested withdrawals exceed the modelled corpus':'Estimated balance after '+sMonths+' withdrawals';
+el('swpStatus').textContent=desired<=sustainable?'Your requested withdrawal is within this simplified model estimate.':'Your requested withdrawal is higher than the modelled sustainable amount; consider a lower withdrawal, shorter plan, or larger corpus.';
+}
+ids.forEach(id=>el(id).addEventListener('input',calc));
+el('reset').addEventListener('click',()=>{const defaults={goal:'Bike',cost:150000,years:3,inflation:6,return:10,current:0,sip:3000,swpCorpus:200000,swpMonths:12,swpReturn:6,swpMonthly:15000};Object.keys(defaults).forEach(k=>el(k).value=defaults[k]);calc();el('copyStatus').textContent='Example values restored.'});
+el('share').addEventListener('click',async()=>{const text='MF Future Goal Planner\nGoal: '+(el('goal').value||'Item')+'\nEstimated future price: '+el('futureCost').textContent+'\nProjected corpus: '+el('corpus').textContent+'\nMonthly SIP needed: '+el('neededSip').textContent+'\nSWP monthly estimate: '+el('sustainable').textContent;try{await navigator.clipboard.writeText(text);el('copyStatus').textContent='Summary copied.'}catch(e){el('copyStatus').textContent=text}});
+if('serviceWorker'in navigator && location.protocol!=='file:')navigator.serviceWorker.register('./sw.js').catch(()=>{});
+calc();
+})();
+</script></body></html>
