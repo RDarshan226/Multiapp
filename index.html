@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07111f"><meta name="description" content="A home for independent mini PWAs.">
+<title>Multiapp Hub</title>
+<style>
+:root{color-scheme:dark;--bg:#07111f;--panel:#101d30;--line:#233b58;--cyan:#55e6ff;--violet:#b79aff;--muted:#a8b8cc}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#122744,var(--bg) 58%);color:#f4f8ff;font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}.wrap{max-width:1000px;margin:auto;padding:28px 18px 48px}.eyebrow{color:var(--cyan);text-transform:uppercase;letter-spacing:.16em;font-size:.76rem;font-weight:800}.hero{padding:24px 0 28px}h1{font-size:clamp(2rem,7vw,3.5rem);line-height:1.04;margin:.55rem 0}p{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:15px}.card{display:block;color:inherit;text-decoration:none;background:linear-gradient(145deg,#13243a,#0d192a);border:1px solid var(--line);border-radius:20px;padding:20px;min-height:180px;transition:transform .15s,border-color .15s}.card:hover{transform:translateY(-3px);border-color:var(--cyan)}.ico{font-size:1.8rem}.card h2{font-size:1.15rem;margin:12px 0 5px}.card p{font-size:.92rem;margin:0 0 14px}.open{color:var(--cyan);font-weight:750}.foot{border-top:1px solid var(--line);margin-top:28px;padding-top:16px;font-size:.85rem;color:var(--muted)}.tag{display:inline-block;border:1px solid #33536d;color:#c8d9ec;border-radius:999px;padding:3px 9px;font-size:.75rem}
+</style></head>
+<body><main class="wrap"><header class="hero"><div class="eyebrow">Personal tools · independent PWAs</div><h1>Multiapp Hub</h1><p>Small, focused apps that live in their own folders and can be installed independently.</p><span class="tag">1 app published · expandable structure</span></header>
+<section class="grid" aria-label="Applications">
+<a class="card" href="./apps/swp-goal/"><div class="ico">📈</div><h2>MF Future Goal Planner</h2><p>Estimate an item's future price, the SIP needed to build the goal corpus, and a planned SWP.</p><span class="open">Open planner →</span></a>
+<a class="card" href="./apps/_template/"><div class="ico">🧩</div><h2>Independent PWA Template</h2><p>Starter app folder to copy when creating another standalone PWA in this repository.</p><span class="open">Open template demo →</span></a>
+</section><footer class="foot">Each app has its own manifest, service worker, cache, and URL scope. Add a new app by copying <code>apps/_template/</code> to a new folder and adding a card here.</footer></main></body></html>
