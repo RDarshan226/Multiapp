@@ -86,7 +86,7 @@ fields.parentNode.insertBefore(loanBox,fields);
 const $=id=>document.getElementById(id);
 $('swpMonths').closest('.field').querySelector('label').textContent='Loan tenure for SWP (months)';
 $('swpMonthly').closest('.field').querySelector('label').textContent='Monthly SWP to pay loan EMI (₹)';
-$('swpMonthly').readOnly=true;
+$('swpMonthly').readOnly=true;$('swpMonths').readOnly=true;
 function val(id){const n=Number($(id).value);return Number.isFinite(n)?Math.max(0,n):0}
 function cash(n){return '₹'+Math.round(Number.isFinite(n)?n:0).toLocaleString('en-IN')}
 function recompute(){
