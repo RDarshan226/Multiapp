@@ -174,4 +174,14 @@ const splash=document.getElementById('appSplash');
 if(splash){const hide=()=>splash.classList.add('hide');window.addEventListener('load',()=>setTimeout(hide,1250),{once:true});setTimeout(hide,2600);}
 })();
 </script>
+
+<script>
+/* Independent splash failsafe: runs even if the calculator script errors. */
+(function(){
+  function dismissPlannerSplash(){var el=document.getElementById('appSplash');if(el){el.classList.add('hide');el.setAttribute('aria-hidden','true');}}
+  if(document.readyState==='complete'||document.readyState==='interactive'){setTimeout(dismissPlannerSplash,900);}else{document.addEventListener('DOMContentLoaded',function(){setTimeout(dismissPlannerSplash,900);},{once:true});}
+  window.addEventListener('error',function(){setTimeout(dismissPlannerSplash,300);},{once:true});
+  setTimeout(dismissPlannerSplash,2200);
+})();
+</script>
 </body></html>
