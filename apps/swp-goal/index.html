@@ -58,15 +58,40 @@ button.secondary{box-shadow:none}
 @media(max-width:720px){.top{margin-bottom:16px}.hero{border-radius:20px}.panel{padding:clamp(14px,4vw,18px)}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
+
+/* v1.3 four-tab connected planner */
+.planner-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:22px 0 18px;padding:7px;border:1px solid #29425f;border-radius:18px;background:#091728;position:sticky;top:8px;z-index:20;backdrop-filter:blur(14px)}
+.planner-tab{border:1px solid transparent;background:transparent;color:#a9bad0;border-radius:12px;padding:12px 8px;font-weight:800;cursor:pointer;min-width:0}.planner-tab:hover{border-color:#35516d;color:#fff}.planner-tab.active{color:#06111f;background:linear-gradient(120deg,#55e6ff,#b79aff);box-shadow:0 0 24px #55e6ff24}
+.tab-panel{display:none;animation:panelIn .22s ease both}.tab-panel.active{display:block}@keyframes panelIn{from{opacity:.35;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.dashboard-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 16px}.dashboard-head h2{margin:5px 0}.dashboard-head .sub{margin:0}
+.live-pill{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;border:1px solid #2b705e;color:#8cf5c8;background:#0c2a28;border-radius:999px;padding:7px 11px;font-size:.76rem;font-weight:800}.live-pill i{width:7px;height:7px;background:#75f0bb;border-radius:50%;box-shadow:0 0 10px #75f0bb}
+.dashboard-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.dashboard-grid>.metric{min-width:0;border:1px solid #29425f;border-radius:18px;padding:18px;background:linear-gradient(145deg,#12233a,#0b1728);box-shadow:0 10px 30px #00000015}.dashboard-grid .value{font-size:clamp(1.25rem,3vw,1.8rem);overflow-wrap:anywhere}.dashboard-grid .primary{border-color:#347d91;background:linear-gradient(145deg,#12384a,#101b31)}
+.dashboard-actions{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}.dashboard-actions button{border-radius:12px;padding:11px 15px}
+#loanPanel .fields{margin-top:16px}#loanPanel .mini{margin-top:16px}
+@media(max-width:600px){.planner-tabs{gap:4px;padding:5px;top:4px}.planner-tab{font-size:.72rem;padding:10px 2px;border-radius:10px}.dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.dashboard-grid>.metric{padding:13px}.dashboard-head{align-items:flex-start;flex-direction:column}.live-pill{align-self:flex-start}.dashboard-actions button{flex:1 1 42%}}
+@media(prefers-reduced-motion:reduce){.tab-panel{animation:none}}
 </style></head>
 <body>
 <div class="splash" id="appSplash" role="status" aria-label="Loading MF Future Goal Planner">
- <div class="splash-inner"><div class="splash-logo" aria-hidden="true">₹</div><div class="splash-title">MF Goal Planner</div><div class="splash-sub">Plan your goal. Model your loan. Fund your EMIs.</div><div class="splash-version">VERSION 1.2</div><div class="splash-track" aria-hidden="true"></div></div>
+ <div class="splash-inner"><div class="splash-logo" aria-hidden="true">₹</div><div class="splash-title">MF Goal Planner</div><div class="splash-sub">Plan your goal. Model your loan. Fund your EMIs.</div><div class="splash-version">VERSION 1.3</div><div class="splash-track" aria-hidden="true"></div></div>
 </div>
 <main class="wrap">
-<div class="top"><a class="back" href="../../">← Multiapp Hub</a><span class="pill">MF goal planner · v1.2</span></div>
-<header class="hero"><div class="eyebrow">Plan a future purchase</div><h1>Make your goal fund work.</h1><p class="sub">Estimate how much a bike or other item may cost later, the monthly SIP that could build the target corpus, and how a planned SWP might fund withdrawals. Change the assumptions to compare scenarios.</p></header>
-<div class="layout">
+<div class="top"><a class="back" href="../../">← Multiapp Hub</a><span class="pill">MF goal planner · v1.3</span></div>
+<header class="hero"><div class="eyebrow">Plan · Invest · Withdraw</div><h1>Make your goal fund work.</h1><p class="sub">A connected workspace for your dashboard, SIP plan, SWP withdrawals and loan repayment. Update assumptions in any tab to refresh the linked estimates.</p></header>
+<nav class="planner-tabs" role="tablist" aria-label="Planner sections">
+<button type="button" class="planner-tab active" role="tab" aria-selected="true" data-tab="dashboard">⌂ Dashboard</button><button type="button" class="planner-tab" role="tab" aria-selected="false" data-tab="sip">↗ SIP details</button><button type="button" class="planner-tab" role="tab" aria-selected="false" data-tab="swp">↘ SWP details</button><button type="button" class="planner-tab" role="tab" aria-selected="false" data-tab="loan">₹ Loan details</button></nav>
+<section class="tab-panel active" data-panel="dashboard" role="tabpanel">
+<div class="dashboard-head"><div><div class="eyebrow">At a glance</div><h2>Goal funding dashboard</h2><p class="sub">Live summary of your goal, investment projection and loan affordability.</p></div><span class="live-pill"><i></i> Linked estimates</span></div>
+<div class="dashboard-grid">
+<div class="metric primary"><div class="label">Future goal cost</div><div class="value" id="dashFuture">₹0</div><div class="note" id="dashGoal">Your goal</div></div>
+<div class="metric"><div class="label">Projected MF corpus</div><div class="value" id="dashCorpus">₹0</div><div class="note">Existing investment + monthly SIP</div></div>
+<div class="metric"><div class="label">Monthly SIP needed</div><div class="value" id="dashSip">₹0</div><div class="note" id="dashGap">To reach your goal target</div></div>
+<div class="metric"><div class="label">Monthly loan EMI</div><div class="value" id="dashEmi">₹0</div><div class="note" id="dashLoanTotal">Enter loan details in the Loan tab</div></div>
+<div class="metric"><div class="label">Sustainable monthly SWP</div><div class="value" id="dashSustainable">₹0</div><div class="note">Based on corpus and withdrawal period</div></div>
+<div class="metric"><div class="label">SWP coverage of EMI</div><div class="value" id="dashCoverage">—</div><div class="note" id="dashCoverageNote">Compares estimated SWP with EMI</div></div></div>
+<div class="dashboard-actions"><button type="button" data-go-tab="sip">Edit SIP plan ↗</button><button type="button" class="secondary" data-go-tab="swp">Review SWP ↘</button><button type="button" class="secondary" data-go-tab="loan">Review loan ₹</button></div>
+<p class="notice">All values are illustrative estimates, not guaranteed returns or financial advice. Loan EMIs remain payable even if market returns are lower than assumed.</p></section>
+<section class="tab-panel" data-panel="sip" role="tabpanel"><div class="layout">
 <section class="panel"><h2>1 · Your future purchase</h2><div class="fields">
 <div class="field full"><label for="goal">Goal / item name</label><input id="goal" value="Bike" maxlength="60"></div>
 <div class="field"><label for="cost">Today's price (₹)</label><input id="cost" type="number" min="1" step="1000" value="150000"></div>
@@ -84,8 +109,8 @@ button.secondary{box-shadow:none}
 <div class="mini"><div class="metric"><div class="label">Projected shortfall / surplus</div><div class="value" id="gap">₹0</div><div class="note" id="gapNote">Based on your SIP</div></div><div class="metric"><div class="label">Goal funding status</div><div class="value" id="status">—</div><div class="note">Estimate, not a guarantee</div></div></div>
 <div><div class="label">Projected corpus mix</div><div class="bar"><span id="investedBar" style="width:0%"></span><span id="growthBar" style="width:0%"></span></div><div class="legend"><span><i class="dot"></i>Invested amount</span><span><i class="dot purple"></i>Illustrative growth</span></div></div>
 </div></section>
-</div>
-<section class="panel section"><h2>3 · Loan repayment funded by SWP</h2><p class="sub">Model a loan used to buy the goal item, then estimate whether monthly SWP withdrawals from your mutual-fund corpus can cover the loan EMI until repayment is complete.</p><div class="fields">
+</div></section>
+<section class="tab-panel" data-panel="swp" role="tabpanel"><section class="panel section"><h2>SWP details · Loan repayment funded by SWP</h2><p class="sub">Model a loan used to buy the goal item, then estimate whether monthly SWP withdrawals from your mutual-fund corpus can cover the loan EMI until repayment is complete.</p><div class="fields">
 <div class="field"><label for="swpCorpus">Corpus available for SWP (₹)</label><input id="swpCorpus" type="number" min="0" step="1000" value="200000"></div>
 <div class="field"><label for="swpMonths">Withdrawal period (months)</label><input id="swpMonths" type="number" min="1" max="600" step="1" value="12"></div>
 <div class="field"><label for="swpReturn">Assumed return during SWP (% p.a.)</label><input id="swpReturn" type="number" min="0" max="30" step="0.5" value="6"></div>
@@ -93,7 +118,8 @@ button.secondary{box-shadow:none}
 </div>
 <div class="mini section"><div class="metric primary"><div class="label">Estimated sustainable monthly withdrawal</div><div class="value" id="sustainable">₹0</div><div class="note">Illustrative withdrawals to use corpus over selected months</div></div><div class="metric"><div class="label">Corpus after planned SWP</div><div class="value" id="swpEnd">₹0</div><div class="note" id="swpNote">At the selected withdrawal amount</div></div></div>
 <p id="swpStatus" class="hint" aria-live="polite"></p><div class="notice">Mutual fund returns are market-linked and not guaranteed. Actual returns vary, and taxes, exit loads, expense ratios, timing, and inflation can change the result. This calculator is an educational estimate, not investment advice. This loan-funded scenario assumes the loan EMI is paid by monthly SWP withdrawals. Mutual-fund returns are not guaranteed and may be lower or negative; do not rely on this estimate as assurance that every EMI will be covered.</div>
-</section>
+</section></section>
+<section class="tab-panel" data-panel="loan" role="tabpanel"><section class="panel section" id="loanPanel"><h2>Loan details & repayment</h2><p class="sub">Model the loan used for your goal and see whether the linked SWP can cover its EMI.</p><div id="loanMetricsSlot"></div></section></section>
 <footer class="foot">Calculations run locally in your browser. No account or personal financial data is sent to a server. Estimates are rounded to the nearest rupee.</footer>
 </main>
 <script>
@@ -138,6 +164,7 @@ const loanBox=document.createElement('div');
 loanBox.className='fields';
 loanBox.innerHTML='<div class="field"><label for="loanAmount">Loan principal (₹)</label><input id="loanAmount" type="number" min="0" step="1000" value="150000"></div><div class="field"><label for="loanRate">Loan interest (% p.a.)</label><input id="loanRate" type="number" min="0" max="50" step="0.25" value="10"></div><div class="field"><label for="loanMonths">Loan tenure (months)</label><input id="loanMonths" type="number" min="1" max="600" step="1" value="36"></div><div class="field full"><label><input id="useProjectedCorpus" type="checkbox" checked style="width:auto;min-height:0;margin-right:8px">Use projected goal-date corpus for SWP</label><span class="hint">Linked to the projected MF corpus above. Uncheck to enter a different SWP corpus.</span></div>';
 fields.parentNode.insertBefore(loanBox,fields);
+const loanPanel=document.getElementById('loanPanel');const loanMetricsSlot=document.getElementById('loanMetricsSlot');if(loanPanel&&loanMetricsSlot)loanPanel.insertBefore(loanBox,loanMetricsSlot);
 const $=id=>document.getElementById(id);
 $('swpMonths').closest('.field').querySelector('label').textContent='Loan tenure for SWP (months)';
 $('swpMonthly').closest('.field').querySelector('label').textContent='Monthly SWP to pay loan EMI (₹)';
@@ -161,7 +188,7 @@ if(metrics[0]){metrics[0].querySelector('.label').textContent='Estimated sustain
 if(metrics[1]){metrics[1].querySelector('.label').textContent='Corpus after loan EMI withdrawals';metrics[1].querySelector('.value').textContent=cash(balance);metrics[1].querySelector('.note').textContent=balance<0?'Corpus may run out before the loan is repaid':'Estimated after '+months+' monthly EMI withdrawals'}
 }
 let emiCard=$('loanEmiCard');
-if(!emiCard){emiCard=document.createElement('div');emiCard.className='mini section';emiCard.id='loanEmiCard';emiCard.innerHTML='<div class="metric"><div class="label">Monthly loan EMI</div><div class="value" id="loanEmiValue">₹0</div><div class="note" id="loanTotalValue"></div></div><div class="metric primary"><div class="label">SWP coverage of EMI</div><div class="value" id="loanCoverage">0%</div><div class="note" id="loanCoverageNote"></div></div>';old.parentNode.insertBefore(emiCard,old)}
+if(!emiCard){emiCard=document.createElement('div');emiCard.className='mini section';emiCard.id='loanEmiCard';emiCard.innerHTML='<div class="metric"><div class="label">Monthly loan EMI</div><div class="value" id="loanEmiValue">₹0</div><div class="note" id="loanTotalValue"></div></div><div class="metric primary"><div class="label">SWP coverage of EMI</div><div class="value" id="loanCoverage">0%</div><div class="note" id="loanCoverageNote"></div></div>';(document.getElementById('loanMetricsSlot')||old).parentNode.insertBefore(emiCard,document.getElementById('loanMetricsSlot')||old)}
 $('loanEmiValue').textContent=cash(emi);$('loanTotalValue').textContent='Total repayment '+cash(emi*months)+' · estimated interest '+cash(Math.max(0,emi*months-principal));
 const cover=emi>0?sustainable/emi*100:100;$('loanCoverage').textContent=Math.round(cover)+'%';$('loanCoverageNote').textContent=cover>=100?'Modelled SWP can cover EMI':'Modelled SWP is below EMI';
 $('swpStatus').textContent=balance>=0?'The model projects enough corpus to pay all loan EMIs, with '+cash(balance)+' remaining.':'The corpus may be exhausted before the loan is fully repaid. Consider a smaller loan, larger corpus, or different tenure/assumptions.';
@@ -182,6 +209,26 @@ if(splash){const hide=()=>splash.classList.add('hide');window.addEventListener('
   if(document.readyState==='complete'||document.readyState==='interactive'){setTimeout(dismissPlannerSplash,900);}else{document.addEventListener('DOMContentLoaded',function(){setTimeout(dismissPlannerSplash,900);},{once:true});}
   window.addEventListener('error',function(){setTimeout(dismissPlannerSplash,300);},{once:true});
   setTimeout(dismissPlannerSplash,2200);
+})();
+</script>
+
+<script>
+(function(){
+ const tabs=[...document.querySelectorAll('[data-tab]')],panels=[...document.querySelectorAll('[data-panel]')];
+ function showTab(name){tabs.forEach(b=>{const a=b.dataset.tab===name;b.classList.toggle('active',a);b.setAttribute('aria-selected',String(a));});panels.forEach(p=>p.classList.toggle('active',p.dataset.panel===name));if(name==='dashboard')updateDashboard();}
+ tabs.forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
+ document.querySelectorAll('[data-go-tab]').forEach(b=>b.addEventListener('click',()=>{showTab(b.dataset.goTab);document.querySelector('.planner-tabs').scrollIntoView({behavior:'smooth',block:'start'});}));
+ const el=id=>document.getElementById(id),txt=(id,v)=>{if(el(id))el(id).textContent=v;};
+ function updateDashboard(){
+  txt('dashGoal',(el('goal')?.value||'Your goal')+' · '+(el('years')?.value||'0')+' years');
+  txt('dashFuture',el('futureCost')?.textContent||'₹0');txt('dashCorpus',el('corpus')?.textContent||'₹0');txt('dashSip',el('neededSip')?.textContent||'₹0');
+  txt('dashGap',(el('gap')?.textContent||'₹0')+' projected gap / surplus');txt('dashEmi',el('loanEmiValue')?.textContent||'₹0');txt('dashLoanTotal',el('loanTotalValue')?.textContent||'Configure loan assumptions');
+  txt('dashSustainable',el('sustainable')?.textContent||'₹0');txt('dashCoverage',el('loanCoverage')?.textContent||'—');txt('dashCoverageNote',el('loanCoverageNote')?.textContent||'Compares estimated SWP with EMI');
+ }
+ document.querySelectorAll('input,select').forEach(n=>n.addEventListener('input',()=>setTimeout(updateDashboard,0)));
+ document.addEventListener('click',e=>{if(e.target.closest('#reset'))setTimeout(updateDashboard,80);});
+ const obs=new MutationObserver(updateDashboard);['futureCost','corpus','neededSip','gap','sustainable','loanEmiValue','loanTotalValue','loanCoverage','loanCoverageNote'].forEach(id=>{if(el(id))obs.observe(el(id),{childList:true,subtree:true,characterData:true});});
+ showTab('dashboard');setTimeout(updateDashboard,150);
 })();
 </script>
 </body></html>
