@@ -73,4 +73,48 @@ el('share').addEventListener('click',async()=>{const text='MF Future Goal Planne
 if('serviceWorker'in navigator && location.protocol!=='file:')navigator.serviceWorker.register('./sw.js').catch(()=>{});
 calc();
 })();
-</script></body></html>
+</script>
+<script>
+(function(){
+const swpSection=Array.from(document.querySelectorAll('section.panel.section')).find(s=>s.textContent.includes('Loan repayment funded by SWP'));
+if(!swpSection)return;
+const fields=swpSection.querySelector('.fields');
+const loanBox=document.createElement('div');
+loanBox.className='fields';
+loanBox.innerHTML='<div class="field"><label for="loanAmount">Loan principal (₹)</label><input id="loanAmount" type="number" min="0" step="1000" value="150000"></div><div class="field"><label for="loanRate">Loan interest (% p.a.)</label><input id="loanRate" type="number" min="0" max="50" step="0.25" value="10"></div><div class="field"><label for="loanMonths">Loan tenure (months)</label><input id="loanMonths" type="number" min="1" max="600" step="1" value="36"></div><div class="field full"><label><input id="useProjectedCorpus" type="checkbox" checked style="width:auto;min-height:0;margin-right:8px">Use projected goal-date corpus for SWP</label><span class="hint">Linked to the projected MF corpus above. Uncheck to enter a different SWP corpus.</span></div>';
+fields.parentNode.insertBefore(loanBox,fields);
+const $=id=>document.getElementById(id);
+$('swpMonths').closest('.field').querySelector('label').textContent='Loan tenure for SWP (months)';
+$('swpMonthly').closest('.field').querySelector('label').textContent='Monthly SWP to pay loan EMI (₹)';
+$('swpMonthly').readOnly=true;
+function val(id){const n=Number($(id).value);return Number.isFinite(n)?Math.max(0,n):0}
+function cash(n){return '₹'+Math.round(Number.isFinite(n)?n:0).toLocaleString('en-IN')}
+function recompute(){
+const principal=val('loanAmount'), annual=val('loanRate')/100, months=Math.max(1,Math.min(600,Math.round(val('loanMonths')))), rate=Math.pow(1+annual,1/12)-1;
+const emi=principal===0?0:(Math.abs(rate)<1e-10?principal/months:principal*rate/(1-Math.pow(1+rate,-months)));
+const linked=$('useProjectedCorpus').checked;
+$('swpCorpus').disabled=linked;
+if(linked){const corpusText=$('corpus').textContent.replace(/[^0-9.-]/g,'');$('swpCorpus').value=Math.max(0,Number(corpusText)||0)}
+$('swpMonths').value=months;$('swpMonthly').value=Math.round(emi);
+const corpus=val('swpCorpus'), swpAnnual=val('swpReturn')/100, sr=Math.pow(1+swpAnnual,1/12)-1;
+const sustainable=Math.abs(sr)<1e-10?corpus/months:corpus*sr/(1-Math.pow(1+sr,-months));
+let balance=corpus;for(let i=0;i<months;i++)balance=balance*(1+sr)-emi;
+const old=swpSection.querySelector('.mini.section');
+if(old){
+const metrics=old.querySelectorAll('.metric');
+if(metrics[0]){metrics[0].querySelector('.label').textContent='Estimated sustainable monthly SWP';metrics[0].querySelector('.value').textContent=cash(sustainable);metrics[0].querySelector('.note').textContent='Compared with the loan EMI'}
+if(metrics[1]){metrics[1].querySelector('.label').textContent='Corpus after loan EMI withdrawals';metrics[1].querySelector('.value').textContent=cash(balance);metrics[1].querySelector('.note').textContent=balance<0?'Corpus may run out before the loan is repaid':'Estimated after '+months+' monthly EMI withdrawals'}
+}
+let emiCard=$('loanEmiCard');
+if(!emiCard){emiCard=document.createElement('div');emiCard.className='mini section';emiCard.id='loanEmiCard';emiCard.innerHTML='<div class="metric"><div class="label">Monthly loan EMI</div><div class="value" id="loanEmiValue">₹0</div><div class="note" id="loanTotalValue"></div></div><div class="metric primary"><div class="label">SWP coverage of EMI</div><div class="value" id="loanCoverage">0%</div><div class="note" id="loanCoverageNote"></div></div>';old.parentNode.insertBefore(emiCard,old)}
+$('loanEmiValue').textContent=cash(emi);$('loanTotalValue').textContent='Total repayment '+cash(emi*months)+' · estimated interest '+cash(Math.max(0,emi*months-principal));
+const cover=emi>0?sustainable/emi*100:100;$('loanCoverage').textContent=Math.round(cover)+'%';$('loanCoverageNote').textContent=cover>=100?'Modelled SWP can cover EMI':'Modelled SWP is below EMI';
+$('swpStatus').textContent=balance>=0?'The model projects enough corpus to pay all loan EMIs, with '+cash(balance)+' remaining.':'The corpus may be exhausted before the loan is fully repaid. Consider a smaller loan, larger corpus, or different tenure/assumptions.';
+}
+['loanAmount','loanRate','loanMonths','swpCorpus','swpReturn','useProjectedCorpus'].forEach(id=>$(id).addEventListener('input',recompute));
+$('reset').addEventListener('click',()=>setTimeout(()=>{ $('loanAmount').value=150000;$('loanRate').value=10;$('loanMonths').value=36;$('useProjectedCorpus').checked=true;recompute()},0));
+document.querySelectorAll('#cost,#years,#inflation,#return,#current,#sip').forEach(e=>e.addEventListener('input',recompute));
+recompute();
+})();
+</script>
+</body></html>
