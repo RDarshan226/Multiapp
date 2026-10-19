@@ -77,10 +77,10 @@ button.secondary{box-shadow:none}
 </style></head>
 <body>
 <div class="splash" id="appSplash" role="status" aria-label="Loading MF Future Goal Planner">
- <div class="splash-inner"><div class="splash-logo" aria-hidden="true">₹</div><div class="splash-title">MF Goal Planner</div><div class="splash-sub">Plan your goal. Model your loan. Fund your EMIs.</div><div class="splash-version">VERSION 1.5</div><div class="splash-track" aria-hidden="true"></div></div>
+ <div class="splash-inner"><div class="splash-logo" aria-hidden="true">₹</div><div class="splash-title">MF Goal Planner</div><div class="splash-sub">Plan your goal. Model your loan. Fund your EMIs.</div><div class="splash-version">VERSION 1.6</div><div class="splash-track" aria-hidden="true"></div></div>
 </div>
 <main class="wrap">
-<div class="top"><a class="back" href="../../">← Multiapp Hub</a><span class="pill">MF goal planner · v1.5</span></div>
+<div class="top"><a class="back" href="../../">← Multiapp Hub</a><span class="pill">MF goal planner · v1.6</span></div>
 <header class="hero"><div class="eyebrow">Plan · Invest · Withdraw</div><h1>Make your goal fund work.</h1><p class="sub">A connected workspace for your dashboard, SIP plan, SWP withdrawals and loan repayment. SIP contributions run for the selected years first; the loan and SWP begin in the month immediately after the SIP period ends.</p></header>
 <nav class="planner-tabs" role="tablist" aria-label="Planner sections">
 <button type="button" class="planner-tab active" role="tab" aria-selected="true" data-tab="dashboard">⌂ Dashboard</button><button type="button" class="planner-tab" role="tab" aria-selected="false" data-tab="sip">↗ SIP details</button><button type="button" class="planner-tab" role="tab" aria-selected="false" data-tab="swp">↘ SWP details</button><button type="button" class="planner-tab" role="tab" aria-selected="false" data-tab="loan">₹ Loan details</button></nav>
@@ -91,8 +91,9 @@ button.secondary{box-shadow:none}
 <div class="metric"><div class="label">Projected MF corpus</div><div class="value" id="dashCorpus">₹0</div><div class="note">Existing investment + monthly SIP</div></div>
 <div class="metric"><div class="label">Monthly SIP needed</div><div class="value" id="dashSip">₹0</div><div class="note" id="dashGap">To reach your goal target</div></div>
 <div class="metric"><div class="label">Monthly loan EMI</div><div class="value" id="dashEmi">₹0</div><div class="note" id="dashLoanTotal">Enter loan details in the Loan tab</div></div>
-<div class="metric"><div class="label">Sustainable monthly SWP</div><div class="value" id="dashSustainable">₹0</div><div class="note">Based on corpus and withdrawal period</div></div>
+<div class="metric"><div class="label">Estimated after-tax monthly SWP</div><div class="value" id="dashSustainable">₹0</div><div class="note" id="dashNetNote">Selected fund scenario · estimated after tax</div></div>
 <div class="metric"><div class="label">SWP coverage of EMI</div><div class="value" id="dashCoverage">—</div><div class="note" id="dashCoverageNote">Compares estimated SWP with EMI</div></div></div>
+<div class="field" style="max-width:360px;margin:0 0 14px"><label for="dashboardFundScenario">Fund scenario used on dashboard</label><select id="dashboardFundScenario"><option value="equity">Equity index</option><option value="hybrid">Hybrid</option><option value="debt">Conservative debt</option></select><span class="hint">Dashboard SWP and EMI coverage use the selected scenario's estimated post-tax withdrawal.</span></div>
 <div class="dashboard-actions"><button type="button" data-go-tab="sip">Edit SIP plan ↗</button><button type="button" class="secondary" data-go-tab="swp">Review SWP ↘</button><button type="button" class="secondary" data-go-tab="loan">Review loan ₹</button></div>
 <p class="notice">All values are illustrative estimates, not guaranteed returns or financial advice. Loan EMIs remain payable even if market returns are lower than assumed.</p></section>
 <section class="tab-panel" data-panel="sip" role="tabpanel"><div class="layout">
@@ -234,11 +235,21 @@ if(splash){const hide=()=>splash.classList.add('hide');window.addEventListener('
   txt('dashGoal',(el('goal')?.value||'Your goal')+' · '+(el('years')?.value||'0')+' years');
   txt('dashFuture',el('futureCost')?.textContent||'₹0');txt('dashCorpus',el('corpus')?.textContent||'₹0');txt('dashSip',el('neededSip')?.textContent||'₹0');
   txt('dashGap',(el('gap')?.textContent||'₹0')+' projected gap / surplus');txt('dashEmi',el('loanEmiValue')?.textContent||'₹0');txt('dashLoanTotal',el('loanTotalValue')?.textContent||'Configure loan assumptions');
-  txt('dashSustainable',el('sustainable')?.textContent||'₹0');txt('dashCoverage',el('loanCoverage')?.textContent||'—');txt('dashCoverageNote',el('loanCoverageNote')?.textContent||'Compares estimated SWP with EMI');
+  const chosen=el('dashboardFundScenario')?.value||'equity';
+  const netId=chosen==='hybrid'?'hyNet':chosen==='debt'?'debtNet':'eqNet';
+  const netText=el(netId)?.textContent||'';
+  const netMatch=netText.match(/₹([\d,]+)/);
+  const netAmount=netMatch?Number(netMatch[1].replace(/,/g,'')):0;
+  const emiText=el('loanEmiValue')?.textContent||'₹0',emiMatch=emiText.match(/₹([\d,]+)/),emi=emiMatch?Number(emiMatch[1].replace(/,/g,'')):0;
+  txt('dashSustainable',netMatch?'₹'+Math.round(netAmount).toLocaleString('en-IN'):(el('sustainable')?.textContent||'₹0'));
+  txt('dashNetNote',netMatch?'Selected '+(chosen==='equity'?'equity index':chosen==='hybrid'?'hybrid':'conservative debt')+' · estimated after tax':'Waiting for scenario estimate');
+  txt('dashCoverage',emi>0&&netMatch?Math.round(netAmount/emi*100)+'%':(el('loanCoverage')?.textContent||'—'));
+  txt('dashCoverageNote',netMatch?'Post-tax SWP divided by monthly EMI':(el('loanCoverageNote')?.textContent||'Compares estimated SWP with EMI'));
  }
  document.querySelectorAll('input,select').forEach(n=>n.addEventListener('input',()=>setTimeout(updateDashboard,0)));
+ if(el('dashboardFundScenario'))el('dashboardFundScenario').addEventListener('change',updateDashboard);
  document.addEventListener('click',e=>{if(e.target.closest('#reset'))setTimeout(updateDashboard,80);});
- const obs=new MutationObserver(updateDashboard);['futureCost','corpus','neededSip','gap','sustainable','loanEmiValue','loanTotalValue','loanCoverage','loanCoverageNote'].forEach(id=>{if(el(id))obs.observe(el(id),{childList:true,subtree:true,characterData:true});});
+ const obs=new MutationObserver(updateDashboard);['futureCost','corpus','neededSip','gap','sustainable','loanEmiValue','loanTotalValue','loanCoverage','loanCoverageNote','eqNet','hyNet','debtNet'].forEach(id=>{if(el(id))obs.observe(el(id),{childList:true,subtree:true,characterData:true});});
  showTab('dashboard');setTimeout(updateDashboard,150);
 })();
 </script>
@@ -269,7 +280,7 @@ if(splash){const hide=()=>splash.classList.add('hide');window.addEventListener('
 })();
 </script>
 <script>
-/* v1.5 fund scenario comparison and estimated tax-aware SWP */
+/* v1.6 fund scenario comparison and estimated tax-aware SWP */
 (function(){
  const $=id=>document.getElementById(id), n=id=>Math.max(0,Number($(id)?.value)||0);
  const money=x=>'₹'+Math.round(Math.max(0,Number.isFinite(x)?x:0)).toLocaleString('en-IN');
