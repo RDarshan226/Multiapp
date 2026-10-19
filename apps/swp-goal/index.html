@@ -77,10 +77,10 @@ button.secondary{box-shadow:none}
 </style></head>
 <body>
 <div class="splash" id="appSplash" role="status" aria-label="Loading MF Future Goal Planner">
- <div class="splash-inner"><div class="splash-logo" aria-hidden="true">₹</div><div class="splash-title">MF Goal Planner</div><div class="splash-sub">Plan your goal. Model your loan. Fund your EMIs.</div><div class="splash-version">VERSION 1.4</div><div class="splash-track" aria-hidden="true"></div></div>
+ <div class="splash-inner"><div class="splash-logo" aria-hidden="true">₹</div><div class="splash-title">MF Goal Planner</div><div class="splash-sub">Plan your goal. Model your loan. Fund your EMIs.</div><div class="splash-version">VERSION 1.5</div><div class="splash-track" aria-hidden="true"></div></div>
 </div>
 <main class="wrap">
-<div class="top"><a class="back" href="../../">← Multiapp Hub</a><span class="pill">MF goal planner · v1.4</span></div>
+<div class="top"><a class="back" href="../../">← Multiapp Hub</a><span class="pill">MF goal planner · v1.5</span></div>
 <header class="hero"><div class="eyebrow">Plan · Invest · Withdraw</div><h1>Make your goal fund work.</h1><p class="sub">A connected workspace for your dashboard, SIP plan, SWP withdrawals and loan repayment. SIP contributions run for the selected years first; the loan and SWP begin in the month immediately after the SIP period ends.</p></header>
 <nav class="planner-tabs" role="tablist" aria-label="Planner sections">
 <button type="button" class="planner-tab active" role="tab" aria-selected="true" data-tab="dashboard">⌂ Dashboard</button><button type="button" class="planner-tab" role="tab" aria-selected="false" data-tab="sip">↗ SIP details</button><button type="button" class="planner-tab" role="tab" aria-selected="false" data-tab="swp">↘ SWP details</button><button type="button" class="planner-tab" role="tab" aria-selected="false" data-tab="loan">₹ Loan details</button></nav>
@@ -122,6 +122,13 @@ button.secondary{box-shadow:none}
 </div>
 <div class="mini section"><div class="metric primary"><div class="label">Estimated sustainable monthly withdrawal</div><div class="value" id="sustainable">₹0</div><div class="note">Illustrative withdrawals to use corpus over selected months</div></div><div class="metric"><div class="label">Corpus after planned SWP</div><div class="value" id="swpEnd">₹0</div><div class="note" id="swpNote">At the selected withdrawal amount</div></div></div>
 <p id="swpStatus" class="hint" aria-live="polite"></p><div class="notice">Mutual fund returns are market-linked and not guaranteed. Actual returns vary, and taxes, exit loads, expense ratios, timing, and inflation can change the result. This calculator is an educational estimate, not investment advice. This loan-funded scenario assumes the loan EMI is paid by monthly SWP withdrawals. Mutual-fund returns are not guaranteed and may be lower or negative; do not rely on this estimate as assurance that every EMI will be covered.</div>
+<div class="panel section" id="scenarioTaxPanel"><h2>Compare fund approaches · estimated after-tax SWP</h2><p class="sub">Compares a diversified equity index, hybrid and conservative debt scenario using your SIP duration, monthly SIP, existing investment and loan tenure. Tax assumption: resident individual, no other taxable income, default/new tax regime for estimation.</p><div class="fields">
+<div class="field"><label for="eqAccum">Equity index return during SIP (% p.a.)</label><input id="eqAccum" type="number" min="0" max="30" step=".5" value="10"></div><div class="field"><label for="eqSwp">Equity index return during SWP (% p.a.)</label><input id="eqSwp" type="number" min="-10" max="30" step=".5" value="8"></div>
+<div class="field"><label for="hyAccum">Hybrid return during SIP (% p.a.)</label><input id="hyAccum" type="number" min="0" max="30" step=".5" value="9"></div><div class="field"><label for="hySwp">Hybrid return during SWP (% p.a.)</label><input id="hySwp" type="number" min="-10" max="30" step=".5" value="7"></div>
+<div class="field"><label for="debtAccum">Debt return during SIP (% p.a.)</label><input id="debtAccum" type="number" min="0" max="20" step=".5" value="7"></div><div class="field"><label for="debtSwp">Debt return during SWP (% p.a.)</label><input id="debtSwp" type="number" min="-5" max="20" step=".5" value="6"></div></div>
+<div class="mini section"><div class="metric"><div class="label">Equity index projected corpus</div><div class="value" id="eqCorpus">₹0</div><div class="note" id="eqNet">After-tax SWP: —</div></div><div class="metric"><div class="label">Hybrid projected corpus</div><div class="value" id="hyCorpus">₹0</div><div class="note" id="hyNet">After-tax SWP: —</div></div><div class="metric"><div class="label">Debt projected corpus</div><div class="value" id="debtCorpus">₹0</div><div class="note" id="debtNet">After-tax SWP: —</div></div></div>
+<div style="overflow-x:auto;margin-top:14px"><table style="width:100%;border-collapse:collapse;font-size:.84rem"><thead><tr><th style="text-align:left;padding:10px;border-bottom:1px solid #29425f">Scenario</th><th style="text-align:right;padding:10px;border-bottom:1px solid #29425f">Corpus at SWP start</th><th style="text-align:right;padding:10px;border-bottom:1px solid #29425f">Gross sustainable SWP/mo</th><th style="text-align:right;padding:10px;border-bottom:1px solid #29425f">Est. post-tax SWP/mo</th><th style="text-align:right;padding:10px;border-bottom:1px solid #29425f">EMI coverage</th></tr></thead><tbody id="scenarioRows"></tbody></table></div><p id="taxSummary" class="hint" aria-live="polite"></p>
+<p class="notice">Tax is an estimate, not a tax-return calculation. The model approximates gains using average cost basis and does not track individual SIP lots/FIFO, exact fund classification, exit loads, surcharge, loss set-off or future tax-law changes. Equity uses indicative 20% short-term and 12.5% long-term capital-gains rates with the ₹1.25 lakh annual LTCG threshold; hybrid uses a simplified 60% equity / 40% debt blend; debt uses an illustrative new-regime slab estimate with no other income and a ₹4 lakh basic exemption. Confirm the actual rules and tax status in the financial year of redemption.</p></div>
 </section></section>
 <section class="tab-panel" data-panel="loan" role="tabpanel"><section class="panel section" id="loanPanel"><h2>Loan details & repayment</h2><p class="sub">The loan starts after the SIP accumulation period. The projected goal-date corpus becomes the opening SWP corpus at that point.</p><div class="timeline-strip"><div><span class="label">Loan / SWP start month</span><strong id="loanStartMonthLabel">—</strong></div><div><span class="label">Loan tenure ends</span><strong id="loanEndMonthLabel">—</strong></div></div><div id="loanMetricsSlot"></div></section></section>
 <footer class="foot">Calculations run locally in your browser. No account or personal financial data is sent to a server. Estimates are rounded to the nearest rupee.</footer>
@@ -259,6 +266,52 @@ if(splash){const hide=()=>splash.classList.add('hide');window.addEventListener('
  }
  ['sipStartMonth','years','loanMonths','goal'].forEach(id=>{if($(id))$(id).addEventListener('input',dates);});
  dates();
+})();
+</script>
+<script>
+/* v1.5 fund scenario comparison and estimated tax-aware SWP */
+(function(){
+ const $=id=>document.getElementById(id), n=id=>Math.max(0,Number($(id)?.value)||0);
+ const money=x=>'₹'+Math.round(Math.max(0,Number.isFinite(x)?x:0)).toLocaleString('en-IN');
+ const mrate=p=>Math.pow(1+p/100,1/12)-1;
+ function sipFV(s,r,m){return m<=0?0:Math.abs(r)<1e-10?s*m:s*(Math.pow(1+r,m)-1)/r;}
+ function slabTax(g){let tax=0,prev=400000;const bands=[[800000,.05],[1200000,.10],[1600000,.15],[2000000,.20],[2400000,.25],[Infinity,.30]];for(const [upper,r] of bands){tax+=Math.max(0,Math.min(g,upper)-prev)*r;prev=upper;if(g<=upper)break;}return tax*1.04;}
+ function runScenario(name,acc,swp,kind,months,emi){
+  const years=Math.min(50,n('years')),m=Math.round(years*12),r=mrate(acc),corpus=n('current')*Math.pow(1+acc/100,years)+sipFV(n('sip'),r,m),sr=mrate(swp);
+  function simulate(gross){
+   let b=corpus,basis=corpus,taxSum=0,annualST=0,annualLT=0,annualDebt=0,withdrawals=0;
+   for(let i=0;i<months;i++){
+    b=Math.max(0,b*(1+sr));if(b<=0)break;
+    const redemption=Math.min(b,gross),gain=redemption*Math.max(0,(b-basis)/Math.max(1,b));
+    if(kind==='equity'){annualST+=gain*.15*.20;annualLT+=gain*.85;}
+    else if(kind==='hybrid'){annualST+=gain*.60*.15*.20;annualLT+=gain*.60*.85;annualDebt+=gain*.40;}
+    else annualDebt+=gain;
+    b-=redemption;basis=Math.max(0,basis-redemption+gain);withdrawals+=redemption;
+    if((i+1)%12===0||i===months-1){
+     let tax=0;
+     if(kind==='equity')tax=(annualST+Math.max(0,annualLT-125000)*.125)*1.04;
+     else if(kind==='hybrid')tax=(annualST+Math.max(0,annualLT-125000)*.125+slabTax(annualDebt)/1.04)*1.04;
+     else tax=slabTax(annualDebt);
+     b=Math.max(0,b-tax);taxSum+=tax;annualST=annualLT=annualDebt=0;
+    }
+   }
+   return {net:Math.max(0,withdrawals-taxSum),tax:taxSum,balance:b};
+  }
+  let lo=0,hi=Math.max(1000,corpus/Math.max(1,months)*5);
+  for(let i=0;i<42;i++){const mid=(lo+hi)/2;if(simulate(mid).net>=corpus)hi=mid;else lo=mid;}
+  const gross=(lo+hi)/2,res=simulate(gross),net=Math.max(0,res.net/months);
+  return {name,corpus,gross,net,coverage:emi>0?net/emi*100:100,tax:res.tax};
+ }
+ function draw(){
+  const months=Math.max(1,Math.min(600,Math.round(Number($('loanMonths')?.value)||36))),p=n('loanAmount'),lr=mrate(n('loanRate')),emi=p===0?0:Math.abs(lr)<1e-10?p/months:p*lr/(1-Math.pow(1+lr,-months));
+  const d=[runScenario('Equity index',n('eqAccum'),Number($('eqSwp').value)||0,'equity',months,emi),runScenario('Hybrid',n('hyAccum'),Number($('hySwp').value)||0,'hybrid',months,emi),runScenario('Conservative debt',n('debtAccum'),Number($('debtSwp').value)||0,'debt',months,emi)];
+  const ids=[['eqCorpus','eqNet'],['hyCorpus','hyNet'],['debtCorpus','debtNet']];
+  d.forEach((s,i)=>{$(ids[i][0]).textContent=money(s.corpus);$(ids[i][1]).textContent='Est. after-tax sustainable SWP: '+money(s.net)+'/mo';});
+  $('scenarioRows').innerHTML=d.map(s=>'<tr><td style="padding:10px;border-bottom:1px solid #20334b">'+s.name+'</td><td style="text-align:right;padding:10px;border-bottom:1px solid #20334b">'+money(s.corpus)+'</td><td style="text-align:right;padding:10px;border-bottom:1px solid #20334b">'+money(s.gross)+'</td><td style="text-align:right;padding:10px;border-bottom:1px solid #20334b">'+money(s.net)+'</td><td style="text-align:right;padding:10px;border-bottom:1px solid #20334b">'+Math.round(s.coverage)+'%</td></tr>').join('');
+  $('taxSummary').textContent='Estimated loan EMI: '+money(emi)+'/month. Below 100% coverage indicates the estimated after-tax withdrawal may not cover EMI. No other taxable income is assumed.';
+ }
+ ['years','current','sip','loanAmount','loanRate','loanMonths','eqAccum','eqSwp','hyAccum','hySwp','debtAccum','debtSwp'].forEach(id=>$(id)?.addEventListener('input',draw));
+ $('reset')?.addEventListener('click',()=>setTimeout(draw,100));draw();
 })();
 </script>
 </body></html>
