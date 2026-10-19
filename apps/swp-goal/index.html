@@ -330,4 +330,38 @@ if(splash){const hide=()=>splash.classList.add('hide');window.addEventListener('
  $('reset')?.addEventListener('click',()=>setTimeout(draw,100));draw();
 })();
 </script>
+
+<script>
+/* Persist planner inputs locally on this device/browser. */
+(function(){
+ const KEY='mfGoalPlannerSavedInputs_v1';
+ const fields=()=>Array.from(document.querySelectorAll('input[id],select[id],textarea[id]'));
+ function save(){
+  try{
+   const data={};
+   fields().forEach(el=>{data[el.id]=el.type==='checkbox'?el.checked:el.value;});
+   localStorage.setItem(KEY,JSON.stringify(data));
+  }catch(e){}
+ }
+ function restore(){
+  try{
+   const raw=localStorage.getItem(KEY);if(!raw)return;
+   const data=JSON.parse(raw);
+   fields().forEach(el=>{
+    if(!Object.prototype.hasOwnProperty.call(data,el.id))return;
+    if(el.type==='checkbox')el.checked=Boolean(data[el.id]);
+    else if(typeof data[el.id]==='string')el.value=data[el.id];
+   });
+   fields().forEach(el=>el.dispatchEvent(new Event(el.tagName==='SELECT'?'change':'input',{bubbles:true})));
+  }catch(e){}
+ }
+ restore();
+ document.addEventListener('input',save,true);
+ document.addEventListener('change',save,true);
+ const reset=document.getElementById('reset');
+ if(reset)reset.addEventListener('click',()=>setTimeout(save,150));
+ window.addEventListener('pagehide',save);
+})();
+</script>
+
 </body></html>
