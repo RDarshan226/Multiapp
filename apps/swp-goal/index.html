@@ -70,6 +70,10 @@ button.secondary{box-shadow:none}
 #loanPanel .fields{margin-top:16px}#loanPanel .mini{margin-top:16px}
 @media(max-width:600px){.planner-tabs{gap:4px;padding:5px;top:4px}.planner-tab{font-size:.72rem;padding:10px 2px;border-radius:10px}.dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.dashboard-grid>.metric{padding:13px}.dashboard-head{align-items:flex-start;flex-direction:column}.live-pill{align-self:flex-start}.dashboard-actions button{flex:1 1 42%}}
 @media(prefers-reduced-motion:reduce){.tab-panel{animation:none}}
+
+/* SIP accumulation precedes all loan/SWP activity */
+.timeline-strip{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:14px 0 18px;padding:15px 17px;border:1px solid #2b506b;border-radius:16px;background:linear-gradient(110deg,#0d2537,#17172f)}.timeline-strip>div:not(.timeline-arrow){display:flex;flex-direction:column;gap:4px;min-width:0}.timeline-strip strong{font-size:.98rem;overflow-wrap:anywhere}.timeline-strip .label{color:#a9bad0;font-size:.76rem}.timeline-arrow{color:#55e6ff;font-size:1.4rem;font-weight:900;flex:0 0 auto}.dashboard-timeline{grid-column:1/-1;margin:0 0 2px}.timeline-strip strong{color:#7ff3ff}
+@media(max-width:520px){.timeline-strip{padding:12px;gap:8px}.timeline-strip strong{font-size:.84rem}.timeline-arrow{font-size:1.1rem}}
 </style></head>
 <body>
 <div class="splash" id="appSplash" role="status" aria-label="Loading MF Future Goal Planner">
@@ -77,12 +81,12 @@ button.secondary{box-shadow:none}
 </div>
 <main class="wrap">
 <div class="top"><a class="back" href="../../">← Multiapp Hub</a><span class="pill">MF goal planner · v1.3</span></div>
-<header class="hero"><div class="eyebrow">Plan · Invest · Withdraw</div><h1>Make your goal fund work.</h1><p class="sub">A connected workspace for your dashboard, SIP plan, SWP withdrawals and loan repayment. Update assumptions in any tab to refresh the linked estimates.</p></header>
+<header class="hero"><div class="eyebrow">Plan · Invest · Withdraw</div><h1>Make your goal fund work.</h1><p class="sub">A connected workspace for your dashboard, SIP plan, SWP withdrawals and loan repayment. SIP contributions run for the selected years first; the loan and SWP begin in the month immediately after the SIP period ends.</p></header>
 <nav class="planner-tabs" role="tablist" aria-label="Planner sections">
 <button type="button" class="planner-tab active" role="tab" aria-selected="true" data-tab="dashboard">⌂ Dashboard</button><button type="button" class="planner-tab" role="tab" aria-selected="false" data-tab="sip">↗ SIP details</button><button type="button" class="planner-tab" role="tab" aria-selected="false" data-tab="swp">↘ SWP details</button><button type="button" class="planner-tab" role="tab" aria-selected="false" data-tab="loan">₹ Loan details</button></nav>
 <section class="tab-panel active" data-panel="dashboard" role="tabpanel">
 <div class="dashboard-head"><div><div class="eyebrow">At a glance</div><h2>Goal funding dashboard</h2><p class="sub">Live summary of your goal, investment projection and loan affordability.</p></div><span class="live-pill"><i></i> Linked estimates</span></div>
-<div class="dashboard-grid">
+<div class="timeline-strip dashboard-timeline"><div><span class="label">SIP contribution window</span><strong id="dashSipPeriod">—</strong></div><div class="timeline-arrow">→</div><div><span class="label">Loan + SWP begin</span><strong id="dashLoanStart">—</strong></div></div><div class="dashboard-grid">
 <div class="metric primary"><div class="label">Future goal cost</div><div class="value" id="dashFuture">₹0</div><div class="note" id="dashGoal">Your goal</div></div>
 <div class="metric"><div class="label">Projected MF corpus</div><div class="value" id="dashCorpus">₹0</div><div class="note">Existing investment + monthly SIP</div></div>
 <div class="metric"><div class="label">Monthly SIP needed</div><div class="value" id="dashSip">₹0</div><div class="note" id="dashGap">To reach your goal target</div></div>
@@ -95,12 +99,12 @@ button.secondary{box-shadow:none}
 <section class="panel"><h2>1 · Your future purchase</h2><div class="fields">
 <div class="field full"><label for="goal">Goal / item name</label><input id="goal" value="Bike" maxlength="60"></div>
 <div class="field"><label for="cost">Today's price (₹)</label><input id="cost" type="number" min="1" step="1000" value="150000"></div>
-<div class="field"><label for="years">Years until purchase</label><input id="years" type="number" min="0" max="50" step="1" value="3"></div>
+<div class="field"><label for="years">SIP period (years)</label><input id="years" type="number" min="0" max="50" step="1" value="3"><span class="hint">This is the SIP-building period. Loan and SWP start only after this period ends.</span></div><div class="field"><label for="sipStartMonth">SIP start month</label><input id="sipStartMonth" type="month" value="2026-01"><span class="hint">Example: Jan–Dec SIP means loan and SWP start in the following January.</span></div>
 <div class="field"><label for="inflation">Price inflation (% p.a.)</label><input id="inflation" type="number" min="0" max="30" step="0.5" value="6"></div>
 <div class="field"><label for="return">MF assumed return (% p.a.)</label><input id="return" type="number" min="0" max="30" step="0.5" value="10"></div>
 <div class="field"><label for="current">Existing goal investment (₹)</label><input id="current" type="number" min="0" step="1000" value="0"></div>
 <div class="field"><label for="sip">Monthly SIP you can invest (₹)</label><input id="sip" type="number" min="0" step="500" value="3000"></div>
-</div><p class="hint">Assumes monthly SIPs at month-end, a constant illustrative return, and annual price inflation.</p>
+</div><p class="hint">Assumes monthly SIPs at month-end, a constant illustrative return, and annual price inflation.</p><div class="timeline-strip" aria-live="polite"><div><span class="label">SIP period</span><strong id="sipPeriodDates">Jan 2026 – Dec 2028</strong></div><div class="timeline-arrow">→</div><div><span class="label">Loan + SWP start</span><strong id="loanSwpStartDate">Jan 2029</strong></div></div>
 <div class="actions"><button id="reset" class="secondary" type="button">Reset example</button><button id="share" type="button">Copy summary</button></div><p id="copyStatus" class="hint" aria-live="polite"></p></section>
 <section class="panel"><h2>2 · Your goal estimate</h2><div class="results" aria-live="polite">
 <div class="metric primary"><div class="label">Estimated future price</div><div class="value" id="futureCost">₹0</div><div class="note" id="futureNote">Purchase target</div></div>
@@ -119,7 +123,7 @@ button.secondary{box-shadow:none}
 <div class="mini section"><div class="metric primary"><div class="label">Estimated sustainable monthly withdrawal</div><div class="value" id="sustainable">₹0</div><div class="note">Illustrative withdrawals to use corpus over selected months</div></div><div class="metric"><div class="label">Corpus after planned SWP</div><div class="value" id="swpEnd">₹0</div><div class="note" id="swpNote">At the selected withdrawal amount</div></div></div>
 <p id="swpStatus" class="hint" aria-live="polite"></p><div class="notice">Mutual fund returns are market-linked and not guaranteed. Actual returns vary, and taxes, exit loads, expense ratios, timing, and inflation can change the result. This calculator is an educational estimate, not investment advice. This loan-funded scenario assumes the loan EMI is paid by monthly SWP withdrawals. Mutual-fund returns are not guaranteed and may be lower or negative; do not rely on this estimate as assurance that every EMI will be covered.</div>
 </section></section>
-<section class="tab-panel" data-panel="loan" role="tabpanel"><section class="panel section" id="loanPanel"><h2>Loan details & repayment</h2><p class="sub">Model the loan used for your goal and see whether the linked SWP can cover its EMI.</p><div id="loanMetricsSlot"></div></section></section>
+<section class="tab-panel" data-panel="loan" role="tabpanel"><section class="panel section" id="loanPanel"><h2>Loan details & repayment</h2><p class="sub">The loan starts after the SIP accumulation period. The projected goal-date corpus becomes the opening SWP corpus at that point.</p><div class="timeline-strip"><div><span class="label">Loan / SWP start month</span><strong id="loanStartMonthLabel">—</strong></div><div><span class="label">Loan tenure ends</span><strong id="loanEndMonthLabel">—</strong></div></div><div id="loanMetricsSlot"></div></section></section>
 <footer class="foot">Calculations run locally in your browser. No account or personal financial data is sent to a server. Estimates are rounded to the nearest rupee.</footer>
 </main>
 <script>
@@ -229,6 +233,32 @@ if(splash){const hide=()=>splash.classList.add('hide');window.addEventListener('
  document.addEventListener('click',e=>{if(e.target.closest('#reset'))setTimeout(updateDashboard,80);});
  const obs=new MutationObserver(updateDashboard);['futureCost','corpus','neededSip','gap','sustainable','loanEmiValue','loanTotalValue','loanCoverage','loanCoverageNote'].forEach(id=>{if(el(id))obs.observe(el(id),{childList:true,subtree:true,characterData:true});});
  showTab('dashboard');setTimeout(updateDashboard,150);
+})();
+</script>
+
+<script>
+/* Timeline: SIP runs first; loan and SWP begin in the following month. */
+(function(){
+ const $=id=>document.getElementById(id);
+ const monthNames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+ function parseMonth(v){const m=/^(\d{4})-(\d{2})$/.exec(v||'');return m?new Date(Number(m[1]),Number(m[2])-1,1):new Date(new Date().getFullYear(),new Date().getMonth(),1);}
+ function shift(d,n){return new Date(d.getFullYear(),d.getMonth()+n,1);}
+ function fmt(d){return monthNames[d.getMonth()]+' '+d.getFullYear();}
+ function dates(){
+  const input=$('sipStartMonth');if(!input)return;
+  const start=parseMonth(input.value),years=Math.max(0,Math.min(50,Number($('years').value)||0)),months=Math.round(years*12);
+  const last=months>0?shift(start,months-1):start,loanStart=shift(start,months);
+  const period=months>0?fmt(start)+' – '+fmt(last):'No SIP accumulation period';
+  const begin=months>0?fmt(loanStart):fmt(start)+' (immediate)';
+  ['sipPeriodDates','dashSipPeriod'].forEach(id=>{if($(id))$(id).textContent=period;});
+  ['loanSwpStartDate','dashLoanStart','loanStartMonthLabel'].forEach(id=>{if($(id))$(id).textContent=begin;});
+  const loanMonths=Math.max(1,Math.min(600,Math.round(Number($('loanMonths')?.value)||36)));
+  const end=shift(loanStart,loanMonths-1);
+  if($('loanEndMonthLabel'))$('loanEndMonthLabel').textContent=fmt(end);
+  if($('dashGoal'))$('dashGoal').textContent=($('goal')?.value||'Your goal')+' · SIP for '+months+' months';
+ }
+ ['sipStartMonth','years','loanMonths','goal'].forEach(id=>{if($(id))$(id).addEventListener('input',dates);});
+ dates();
 })();
 </script>
 </body></html>
