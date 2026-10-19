@@ -1,4 +1,4 @@
-const CACHE = 'mf-goal-planner-v11';;
+const CACHE = 'mf-goal-planner-v12';;
 const CORE = ['./', './index.html', './manifest.json'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(CORE)).then(() => self.skipWaiting()));
