@@ -163,7 +163,7 @@ el('swpStatus').textContent=desired<=sustainable?'Your requested withdrawal is w
 ids.forEach(id=>el(id).addEventListener('input',calc));
 el('reset').addEventListener('click',()=>{const defaults={goal:'Bike',cost:150000,years:3,inflation:6,return:10,current:0,sip:3000,swpCorpus:200000,swpMonths:12,swpReturn:6,swpMonthly:15000};Object.keys(defaults).forEach(k=>el(k).value=defaults[k]);calc();el('copyStatus').textContent='Example values restored.'});
 el('share').addEventListener('click',async()=>{const text='MF Future Goal Planner\nGoal: '+(el('goal').value||'Item')+'\nEstimated future price: '+el('futureCost').textContent+'\nProjected corpus: '+el('corpus').textContent+'\nMonthly SIP needed: '+el('neededSip').textContent+'\nSWP monthly estimate: '+el('sustainable').textContent;try{await navigator.clipboard.writeText(text);el('copyStatus').textContent='Summary copied.'}catch(e){el('copyStatus').textContent=text}});
-if('serviceWorker'in navigator && location.protocol!=='file:')navigator.serviceWorker.register('./sw.js').catch(()=>{});
+if('serviceWorker'in navigator && location.protocol!=='file:'){navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{});}
 calc();
 })();
 </script>
