@@ -77,10 +77,10 @@ button.secondary{box-shadow:none}
 </style></head>
 <body>
 <div class="splash" id="appSplash" role="status" aria-label="Loading MF Future Goal Planner">
- <div class="splash-inner"><div class="splash-logo" aria-hidden="true">₹</div><div class="splash-title">MF Goal Planner</div><div class="splash-sub">Plan your goal. Model your loan. Fund your EMIs.</div><div class="splash-version">VERSION 1.3</div><div class="splash-track" aria-hidden="true"></div></div>
+ <div class="splash-inner"><div class="splash-logo" aria-hidden="true">₹</div><div class="splash-title">MF Goal Planner</div><div class="splash-sub">Plan your goal. Model your loan. Fund your EMIs.</div><div class="splash-version">VERSION 1.4</div><div class="splash-track" aria-hidden="true"></div></div>
 </div>
 <main class="wrap">
-<div class="top"><a class="back" href="../../">← Multiapp Hub</a><span class="pill">MF goal planner · v1.3</span></div>
+<div class="top"><a class="back" href="../../">← Multiapp Hub</a><span class="pill">MF goal planner · v1.4</span></div>
 <header class="hero"><div class="eyebrow">Plan · Invest · Withdraw</div><h1>Make your goal fund work.</h1><p class="sub">A connected workspace for your dashboard, SIP plan, SWP withdrawals and loan repayment. SIP contributions run for the selected years first; the loan and SWP begin in the month immediately after the SIP period ends.</p></header>
 <nav class="planner-tabs" role="tablist" aria-label="Planner sections">
 <button type="button" class="planner-tab active" role="tab" aria-selected="true" data-tab="dashboard">⌂ Dashboard</button><button type="button" class="planner-tab" role="tab" aria-selected="false" data-tab="sip">↗ SIP details</button><button type="button" class="planner-tab" role="tab" aria-selected="false" data-tab="swp">↘ SWP details</button><button type="button" class="planner-tab" role="tab" aria-selected="false" data-tab="loan">₹ Loan details</button></nav>
@@ -99,7 +99,7 @@ button.secondary{box-shadow:none}
 <section class="panel"><h2>1 · Your future purchase</h2><div class="fields">
 <div class="field full"><label for="goal">Goal / item name</label><input id="goal" value="Bike" maxlength="60"></div>
 <div class="field"><label for="cost">Today's price (₹)</label><input id="cost" type="number" min="1" step="1000" value="150000"></div>
-<div class="field"><label for="years">SIP period (years)</label><input id="years" type="number" min="0" max="50" step="1" value="3"><span class="hint">This is the SIP-building period. Loan and SWP start only after this period ends.</span></div><div class="field"><label for="sipStartMonth">SIP start month</label><input id="sipStartMonth" type="month" value="2026-01"><span class="hint">Example: Jan–Dec SIP means loan and SWP start in the following January.</span></div>
+<div class="field"><label for="years">SIP period (years)</label><input id="years" type="number" min="0" max="50" step="1" value="3"><span class="hint">This is the SIP-building period. Loan and SWP start only after this period ends.</span></div><div class="field"><label for="sipStartMonth">SIP start month</label><input id="sipStartMonth" type="month" value="2026-10"><span class="hint">Example: Jan–Dec SIP means loan and SWP start in the following January.</span></div>
 <div class="field"><label for="inflation">Price inflation (% p.a.)</label><input id="inflation" type="number" min="0" max="30" step="0.5" value="6"></div>
 <div class="field"><label for="return">MF assumed return (% p.a.)</label><input id="return" type="number" min="0" max="30" step="0.5" value="10"></div>
 <div class="field"><label for="current">Existing goal investment (₹)</label><input id="current" type="number" min="0" step="1000" value="0"></div>
